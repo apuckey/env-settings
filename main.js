@@ -2,7 +2,7 @@ var currentFile = require.resolve('./');
 // extract main dir
 var arTmp = currentFile.replace(/\\/g, '/').split('/');
 var tmp = arTmp.slice(0, arTmp.indexOf('node_modules'));
-var cfg = require(tmp.join('/') + '/config/settings.json');
+var cfg = require(tmp.join('/') + '/config/settings');
 var merge = require('merge-recursive');
 
 var settings = cfg.default;
