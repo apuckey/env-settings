@@ -1,20 +1,17 @@
-var currentFile = require.resolve('./');
-// extract main dir
-var arTmp = currentFile.replace(/\\/g, '/').split('/');
-var tmp = arTmp.slice(0, arTmp.indexOf('node_modules'));
-var cfg = require(tmp.join('/') + '/config/settings');
 var merge = require('merge-recursive');
 
-var settings = cfg.default;
-var ENV = process.env.NODE_ENV || 'development';
+module.exports = function (location) {
+  var cfg = require(location);
+  var module = cfg.default;
+  var ENV = process.env.NODE_ENV || 'development';
 
-try {
-  settings = merge.recursive(settings, cfg[ENV]);
-} catch(e) {
-  // No env detected. Issuing a warning.
-  console.error('Environment specific settings not found: %s', ENV);
-}
+  try {
+    module = merge.recursive(module, cfg[ENV]);
+  } catch(e) {
+    console.error('Environment specific settings not found: %s', ENV);
+  }
 
-settings.env = settings.environment = settings.ENV = ENV;
+  module.env = module.environment = module.ENV = ENV;
 
-module.exports = settings;
+  return module;
+};
